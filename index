@@ -4,12 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interactive Price Proposal | مولد عروض الأسعار التفاعلي</title>
-<!-- استدعاء خط Cairo ومكتبة توليد الـ PDF والأيقونات -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family: 'Cairo', sans-serif;}
@@ -38,7 +35,7 @@ body{background-color: #0f0e0d; padding: 30px 20px; color: #f3efe9;}
 .items-table{width: 100%; border-collapse: collapse; margin-top: 0.5rem; margin-bottom: 1rem;}
 .items-table th{background: #2c2925; color: #e8e4df; font-size: 13px; font-weight: 700; padding: 12px; text-align: start; border-radius: 4px;}
 .items-table td{padding: 10px 4px; vertical-align: top;}
-.btn-del{background: #3a1d1d; border: 1px solid #5c2323; color: #e03131; padding: 10px; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center;}
+.btn-del{background: #3a1d1d; border: 1px solid #5c2323; color: #e03131; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: bold;}
 .btn-del:hover{background: #e03131; color: #fff;}
 
 .btn-add{background: transparent; border: 1px dashed #D85A30; color: #D85A30; padding: 10px 20px; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; margin-bottom: 1.5rem;}
@@ -59,22 +56,29 @@ body{background-color: #0f0e0d; padding: 30px 20px; color: #f3efe9;}
 .btn.primary{background: #D85A30; border-color: #D85A30; color: #fff;}
 .btn.primary:hover{background: #ff7643; border-color: #ff7643; box-shadow: 0 4px 15px rgba(216,90,48,0.3);}
 
-/* تصميم وتنسيق الـ PDF عند التصدير للطباعة (خلفية بيضاء رسمية بالكامل) */
-#proposal-pdf { display: none; background: #ffffff; color: #1c1a18; padding: 40px; font-family: 'Cairo', sans-serif; }
-.pdf-top{display: flex; justify-content: space-between; border-bottom: 3px solid #D85A30; padding-bottom: 20px; margin-bottom: 25px;}
-.pdf-top h2{font-size: 26px; font-weight: 800; color: #1c1a18;}
-.pdf-meta-grid{display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;}
-.pdf-meta-box h4{font-size: 13px; color: #D85A30; border-bottom: 1px solid #dcd7d2; padding-bottom: 4px; margin-bottom: 8px; text-transform: uppercase;}
-.pdf-meta-line{font-size: 13px; margin-bottom: 5px; color: #3c3734;}
-.pdf-meta-line strong{color: #1c1a18;}
-.pdf-table{width: 100%; border-collapse: collapse; margin: 25px 0;}
-.pdf-table th{background: #fcfbfa; color: #1c1a18; font-weight: 700; font-size: 13px; padding: 12px; border-bottom: 2px solid #bcbab6; text-align: start;}
-.pdf-table td{padding: 12px; border-bottom: 1px solid #f3efe9; font-size: 13px; color: #3c3734;}
-.pdf-calc-box{float: left; width: 280px; margin-top: 15px;}
-html[dir="rtl"] .pdf-calc-box{float: right;}
-.pdf-calc-row{display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #5c5651;}
-.pdf-calc-row.grand{font-size: 16px; font-weight: 700; color: #1c1a18; border-top: 1px solid #bcbab6; padding-top: 8px; margin-top: 8px;}
-.pdf-footer{margin-top: 100px; border-top: 1px dashed #dcd7d2; padding-top: 15px; text-align: center; font-size: 11px; color: #8c857f;}
+/* قوالب الطباعة المعزولة */
+#proposal-pdf { display: none; }
+
+/* قواعد الطباعة الذكية وتحويل الملف إلى شكل رسمي أبيض */
+@media print {
+  body { background: #ffffff !important; color: #1c1a18 !important; padding: 0 !important; }
+  .wrap { display: none !important; }
+  #proposal-pdf { display: block !important; background: #ffffff !important; color: #1c1a18 !important; padding: 20px; font-family: 'Cairo', sans-serif; }
+  .pdf-top { display: flex; justify-content: space-between; border-bottom: 3px solid #D85A30; padding-bottom: 20px; margin-bottom: 25px; }
+  .pdf-top h2 { font-size: 26px; font-weight: 800; color: #1c1a18; }
+  .pdf-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+  .pdf-meta-box h4 { font-size: 13px; color: #D85A30; border-bottom: 1px solid #dcd7d2; padding-bottom: 4px; margin-bottom: 8px; text-transform: uppercase; }
+  .pdf-meta-line { font-size: 13px; margin-bottom: 5px; color: #3c3734; }
+  .pdf-meta-line strong { color: #1c1a18; }
+  .pdf-table { width: 100%; border-collapse: collapse; margin: 25px 0; }
+  .pdf-table th { background: #fcfbfa !important; color: #1c1a18 !important; font-weight: 700; font-size: 13px; padding: 12px; border-bottom: 2px solid #bcbab6; text-align: start; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pdf-table td { padding: 12px; border-bottom: 1px solid #f3efe9; font-size: 13px; color: #3c3734; }
+  .pdf-calc-box { float: left; width: 280px; margin-top: 15px; }
+  html[dir="rtl"] .pdf-calc-box { float: right; }
+  .pdf-calc-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #5c5651; }
+  .pdf-calc-row.grand { font-size: 16px; font-weight: 700; color: #1c1a18; border-top: 1px solid #bcbab6; padding-top: 8px; margin-top: 8px; }
+  .pdf-footer { margin-top: 80px; border-top: 1px dashed #dcd7d2; padding-top: 15px; text-align: center; font-size: 11px; color: #8c857f; }
+}
 </style>
 </head>
 <body>
@@ -82,11 +86,10 @@ html[dir="rtl"] .pdf-calc-box{float: right;}
 <div class="wrap">
   <div class="header-area">
     <div class="main-title" id="page-title" data-en="Price <span>Proposal</span>">عرض <span>سعر</span></div>
-    <button class="btn-lang" onclick="toggleLanguage()" id="lang-btn"><i class="ti ti-language"></i> English</button>
+    <button class="btn-lang" onclick="toggleLanguage()" id="lang-btn">English</button>
   </div>
 
-  <!-- القسم الأول: بيانات العرض الأساسية -->
-  <div class="section-title"><i class="ti ti-file-description"></i> <span data-en="Proposal Details">تفاصيل الهوية والعرض</span></div>
+  <div class="section-title"><span data-en="Proposal Details">تفاصيل الهوية والعرض</span></div>
   <div class="row3">
     <div class="field">
       <label data-en="Proposal Number">رقم عرض السعر</label>
@@ -103,9 +106,8 @@ html[dir="rtl"] .pdf-calc-box{float: right;}
   </div>
 
   <div class="row2">
-    <!-- القسم الثاني: بيانات مقدم الخدمة (أنت) -->
     <div>
-      <div class="section-title"><i class="ti ti-user-check"></i> <span data-en="From (Service Provider)">صادر من (مقدم الخدمة)</span></div>
+      <div class="section-title"><span data-en="From (Service Provider)">صادر من (مقدم الخدمة)</span></div>
       <div class="field">
         <input type="text" id="from-name" placeholder="اسمك التجاري أو الشخصي" data-placeholder-en="Your Name / Brand"/>
       </div>
@@ -113,9 +115,8 @@ html[dir="rtl"] .pdf-calc-box{float: right;}
         <input type="text" id="from-contact" placeholder="الهاتف أو البريد الإلكتروني" data-placeholder-en="Phone or Email"/>
       </div>
     </div>
-    <!-- القسم الثالث: بيانات العميل -->
     <div>
-      <div class="section-title"><i class="ti ti-users"></i> <span data-en="To (Client)">مقدم إلى (العميل)</span></div>
+      <div class="section-title"><span data-en="To (Client)">مقدم إلى (العميل)</span></div>
       <div class="field">
         <input type="text" id="to-name" placeholder="اسم شركة العميل / العميل الكريم" data-placeholder-en="Client / Company Name"/>
       </div>
@@ -125,8 +126,7 @@ html[dir="rtl"] .pdf-calc-box{float: right;}
     </div>
   </div>
 
-  <!-- القسم الرابع: جدول بنود الخدمات والأعمال -->
-  <div class="section-title"><i class="ti ti-list-check"></i> <span data-en="Scope of Work & Pricing">نطاق العمل والتسعير</span></div>
+  <div class="section-title"><span data-en="Scope of Work & Pricing">نطاق العمل والتسعير</span></div>
   <table class="items-table" id="items-container">
     <thead>
       <tr>
@@ -137,26 +137,23 @@ html[dir="rtl"] .pdf-calc-box{float: right;}
       </tr>
     </thead>
     <tbody id="items-tbody">
-      <!-- الصف الأول الافتراضي -->
       <tr>
         <td><div class="field" style="margin:0;"><input type="text" class="item-desc" placeholder="مثال: تصميم هوية بصرية كاملة ودليل الاستخدام" data-placeholder-en="e.g., Full Visual Identity Design & Brand Guidelines"/></div></td>
         <td><div class="field" style="margin:0;"><input type="number" class="item-qty" value="1" oninput="calculateTotal()"/></div></td>
         <td><div class="field" style="margin:0;"><input type="number" class="item-price" placeholder="0.00" oninput="calculateTotal()"/></div></td>
-        <td style="text-align: center;"><button class="btn-del" onclick="deleteRow(this)"><i class="ti ti-trash"></i></button></td>
+        <td style="text-align: center;"><button class="btn-del" onclick="deleteRow(this)">حذف</button></td>
       </tr>
     </tbody>
   </table>
   
-  <button class="btn-add" onclick="addNewRow()"><i class="ti ti-plus"></i> <span data-en="Add Additional Item">إضافة بند خدمات جديد</span></button>
+  <button class="btn-add" onclick="addNewRow()">+ <span data-en="Add Additional Item">إضافة بند خدمات جديد</span></button>
 
   <div class="row2" style="align-items: flex-start;">
-    <!-- شروط وأحكام العرض -->
     <div class="field">
-      <div class="section-title" style="margin-top:0;"><i class="ti ti-shield-alert"></i> <span data-en="Terms & Conditions">الشروط والأحكام</span></div>
+      <div class="section-title" style="margin-top:0;"><span data-en="Terms & Conditions">الشروط والأحكام</span></div>
       <textarea id="prop-terms" style="min-height: 110px;" placeholder="مثال: مدة العمل المتوقعة 15 يوم عمل من تاريخ التعميد ودفع الدفعة الأولى (50%)." data-placeholder-en="e.g., Estimated timeline is 15 business days starting from signing and receiving the 50% deposit."></textarea>
     </div>
     
-    <!-- بوكس الحسابات التلقائية -->
     <div class="calc-wrapper" style="margin:0; padding:0; border:0;">
       <div class="calc-box">
         <div class="calc-row"><span data-en="Subtotal:">المجموع الفرعي:</span><span id="subtotal-val">0.00</span></div>
@@ -170,20 +167,16 @@ html[dir="rtl"] .pdf-calc-box{float: right;}
     </div>
   </div>
 
-  <!-- الأزرار السفلية -->
   <div class="actions-bar">
-    <button class="btn" onclick="clearAll()"><i class="ti ti-clear-all"></i> <span data-en="Clear Data">مسح البيانات</span></button>
-    <button class="btn primary" onclick="exportProposalPDF()"><i class="ti ti-file-export"></i> <span data-en="Export PDF Document">تصدير وثيقة PDF</span></button>
+    <button class="btn" onclick="clearAll()"><span data-en="Clear Data">مسح البيانات</span></button>
+    <button class="btn primary" onclick="exportProposalPDF()"><span data-en="Export PDF Document">تصدير وثيقة PDF</span></button>
   </div>
 </div>
 
-<!-- القالب المخفي الفاخر والأبيض المخصص لحفظ وطباعة العرض للعميل بجودة ممتازة -->
 <div id="proposal-pdf"></div>
 
 <script>
 let currentLang = 'ar';
-
-// تعيين تاريخ اليوم تلقائياً عند فتح الأداة
 document.getElementById('prop-date').valueAsDate = new Date();
 
 function toggleLanguage() {
@@ -194,11 +187,11 @@ function toggleLanguage() {
   if (currentLang === 'en') {
     htmlEl.setAttribute('lang', 'en');
     htmlEl.setAttribute('dir', 'ltr');
-    langBtn.innerHTML = '<i class="ti ti-language"></i> العربية';
+    langBtn.innerHTML = 'العربية';
   } else {
     htmlEl.setAttribute('lang', 'ar');
     htmlEl.setAttribute('dir', 'rtl');
-    langBtn.innerHTML = '<i class="ti ti-language"></i> English';
+    langBtn.innerHTML = 'English';
   }
   
   document.querySelectorAll('[data-en]').forEach(el => {
@@ -217,14 +210,14 @@ function toggleLanguage() {
 function addNewRow() {
   const tbody = document.getElementById('items-tbody');
   const tr = document.createElement('tr');
-  
   const descPlaceholder = currentLang === 'en' ? 'Service Description...' : 'وصف الخدمة أو البند الإضافي...';
+  const delTxt = currentLang === 'en' ? 'Delete' : 'حذف';
   
   tr.innerHTML = `
     <td><div class="field" style="margin:0;"><input type="text" class="item-desc" placeholder="${descPlaceholder}"/></div></td>
     <td><div class="field" style="margin:0;"><input type="number" class="item-qty" value="1" oninput="calculateTotal()"/></div></td>
     <td><div class="field" style="margin:0;"><input type="number" class="item-price" placeholder="0.00" oninput="calculateTotal()"/></div></td>
-    <td style="text-align: center;"><button class="btn-del" onclick="deleteRow(this)"><i class="ti ti-trash"></i></button></td>
+    <td style="text-align: center;"><button class="btn-del" onclick="deleteRow(this)">${delTxt}</button></td>
   `;
   tbody.appendChild(tr);
 }
@@ -238,9 +231,7 @@ function deleteRow(button) {
   }
 }
 
-let subtotalGlobal = 0;
-let taxAmountGlobal = 0;
-let grandTotalGlobal = 0;
+let subtotalGlobal = "0.00", taxAmountGlobal = "0.00", grandTotalGlobal = "0.00";
 
 function calculateTotal() {
   const tbody = document.getElementById('items-tbody');
@@ -285,14 +276,13 @@ function buildPDFHTML() {
     tax: currentLang === 'en' ? `VAT (${document.getElementById('tax-input').value}%):` : `ضريبة القيمة المضافة (${document.getElementById('tax-input').value}%):`,
     grand: currentLang === 'en' ? 'Grand Total:' : 'الإجمالي المستحق:',
     terms: currentLang === 'en' ? 'Terms & Execution Conditions:' : 'شروط التنفيذ والأحكام العامة:',
-    footer: currentLang === 'en' ? 'Thank you for your trust. We look forward to a successful collaboration.' : 'نشكركم على ثقتكم الغالية، ونتطلع لبناء شراكة عمل ناجحة ومثمرة.'
+    footer: currentLang === 'en' ? 'Thank you for your trust. We look forward to a collaboration.' : 'نشكركم على ثقتكم الغالية، ونتطلع لبناء شراكة عمل ناجحة ومثمرة.'
   };
 
   const currency = currentLang === 'en' ? ' SAR' : ' ريال';
-  
-  // تجميع صفوف الخدمات لملف الـ PDF
   let tableRowsHTML = '';
   const tbody = document.getElementById('items-tbody');
+  
   for (let i = 0; i < tbody.rows.length; i++) {
     const row = tbody.rows[i];
     const desc = row.querySelector('.item-desc').value || '—';
@@ -371,22 +361,7 @@ function buildPDFHTML() {
 function exportProposalPDF() {
   calculateTotal();
   buildPDFHTML();
-  
-  const element = document.getElementById('proposal-pdf');
-  element.style.display = 'block'; 
-  
-  const clientName = document.getElementById('to-name').value.trim() || 'Client';
-  const opt = {
-    margin:       15,
-    filename:     `Price-Proposal-${clientName}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save().then(() => {
-    element.style.display = 'none'; 
-  });
+  window.print();
 }
 
 function clearAll() {
@@ -399,7 +374,7 @@ function clearAll() {
       <td><div class="field" style="margin:0;"><input type="text" class="item-desc" placeholder="${currentLang === 'en' ? 'e.g., Full Visual Identity Design' : 'مثال: تصميم هوية بصرية كاملة ودليل الاستخدام'}"/></div></td>
       <td><div class="field" style="margin:0;"><input type="number" class="item-qty" value="1" oninput="calculateTotal()"/></div></td>
       <td><div class="field" style="margin:0;"><input type="number" class="item-price" placeholder="0.00" oninput="calculateTotal()"/></div></td>
-      <td style="text-align: center;"><button class="btn-del" onclick="deleteRow(this)"><i class="ti ti-trash"></i></button></td>
+      <td style="text-align: center;"><button class="btn-del" onclick="deleteRow(this)">${currentLang === 'en' ? 'Delete' : 'حذف'}</button></td>
     </tr>
   `;
   calculateTotal();
